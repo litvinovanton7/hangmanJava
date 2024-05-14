@@ -6,6 +6,7 @@ import java.util.*;
 public class Main {
     private static final String WIN_MESSAGE = "Congratulation! You won this game";
     private static final String LOSE_MESSAGE = "Sorry but you lost this game";
+    private static final Hangman HANGMAN = new Hangman();
     private static final String RANDOM_WORD;
 
     static {
@@ -20,9 +21,8 @@ public class Main {
         gameLoop();
     }
 
-    public static void gameLoop() throws IOException {
+    public static void gameLoop() {
         StringBuilder hidden = new StringBuilder();
-        DrawHangman hangman = new DrawHangman();
         Scanner sc = new Scanner(System.in);
         hidden.append("*".repeat(RANDOM_WORD.length()));
         int mistakes = 0;
@@ -41,7 +41,7 @@ public class Main {
                 }
                 System.out.println(hidden);
             } else {
-                hangman.drawHangman(mistakes);
+                HANGMAN.drawHangman(mistakes);
                 mistakes++;
             }
 
@@ -50,20 +50,16 @@ public class Main {
                 break;
             }
 
-            if (hidden.toString().equals(RANDOM_WORD)) {
+            if (isWin(hidden)) {
                 System.out.println(WIN_MESSAGE);
                 break;
             }
         }
     }
 
-//    public String isWin(int mistakes) {
-//        if () {
-//            return LOSE_MESSAGE;
-//        }
-//
-//        return ;
-//    }
+    public static boolean isWin(StringBuilder word) {
+        return word.toString().equals(RANDOM_WORD);
+    }
 
     public static String getRandomWord() throws IOException {
         Random random = new Random();
