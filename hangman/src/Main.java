@@ -21,7 +21,7 @@ public class Main {
         gameLoop();
     }
 
-    public static void gameLoop() {
+    public static void gameLoop() throws IOException {
         StringBuilder hidden = new StringBuilder();
         Scanner sc = new Scanner(System.in);
         hidden.append("*".repeat(RANDOM_WORD.length()));
@@ -63,7 +63,11 @@ public class Main {
 
     public static String getRandomWord() throws IOException {
         Random random = new Random();
-        List<String> words = Files.readAllLines(Paths.get("src/wordsDB/words.txt"));
+        List<String> words = Files.readAllLines(Paths.get("hangman/src/words.txt"));
+
+        if (words.isEmpty()) {
+            throw new IOException("The words file is empty");
+        }
 
         return words.get(random.nextInt(words.size()));
     }
