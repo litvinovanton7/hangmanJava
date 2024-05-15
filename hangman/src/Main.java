@@ -26,9 +26,9 @@ public class Main {
     }
 
     public static void gameLoop() {
-        StringBuilder hidden = new StringBuilder();
+        StringBuilder hiddenRandomWord = new StringBuilder();
         Scanner sc = new Scanner(System.in);
-        hidden.append("*".repeat(RANDOM_WORD.length()));
+        hiddenRandomWord.append("*".repeat(RANDOM_WORD.length()));
         List<String> wrongKeyword = new ArrayList<>();
         List<String> usedKeywords = new ArrayList<>();
         int mistakes = 0;
@@ -47,14 +47,14 @@ public class Main {
             if (correctKeyword(keyword, RANDOM_WORD)) {
                 for (int i = 0; i < RANDOM_WORD.length(); i++) {
                     if (RANDOM_WORD.charAt(i) == keyword.charAt(0)) {
-                        hidden.replace(i, i + 1, keyword);
+                        hiddenRandomWord.replace(i, i + 1, keyword);
                     }
                 }
                 if (in(usedKeywords, keyword)) {
                     System.out.println(CORRECT_LETTER_ALREADY_USED_MESSAGE);
                 }
                 usedKeywords.add(keyword);
-                System.out.println(hidden);
+                System.out.println(hiddenRandomWord);
             } else {
                 if (in(wrongKeyword, keyword)) {
                     continue;
@@ -70,14 +70,11 @@ public class Main {
                 mistakes++;
             }
 
-            if (mistakes == DEAD_STATE) {
-                System.out.println(GAME_LOST_MESSAGE);
-                break;
-            }
-
-            if (isWin(hidden)) {
+            if (isWinner(hiddenRandomWord, mistakes)) {
                 System.out.println(GAME_WIN_MESSAGE);
                 break;
+            } else {
+                System.out.println(GAME_LOST_MESSAGE);
             }
         }
     }
@@ -107,6 +104,14 @@ public class Main {
 
     public static boolean isWin(StringBuilder word) {
         return word.toString().equals(RANDOM_WORD);
+    }
+
+    public static boolean isLose(int mistakes) {
+        return mistakes == DEAD_STATE;
+    }
+
+    public static boolean isWinner(StringBuilder word, int mistakes) {
+        return isWin(word) && !isLose(mistakes);
     }
 
     public static boolean isKeyword(String keyword) {
