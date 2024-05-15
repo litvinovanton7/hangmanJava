@@ -43,29 +43,31 @@ public class Main {
                 System.out.println(WRONG_LETTER_ALREADY_USED_MESSAGE);
             }
 
-            if (isKeyword(keyword)) {
-                if (in(RANDOM_WORD, keyword)) {
-                    for (int i = 0; i < RANDOM_WORD.length(); i++) {
-                        if (RANDOM_WORD.charAt(i) == keyword.charAt(0)) {
-                            hidden.replace(i, i + 1, keyword);
-                        }
+
+            if (correctKeyword(keyword, RANDOM_WORD)) {
+                for (int i = 0; i < RANDOM_WORD.length(); i++) {
+                    if (RANDOM_WORD.charAt(i) == keyword.charAt(0)) {
+                        hidden.replace(i, i + 1, keyword);
                     }
-                    if (in(usedKeywords, keyword)) {
-                        System.out.println(CORRECT_LETTER_ALREADY_USED_MESSAGE);
-                    }
-                    usedKeywords.add(keyword);
-                    System.out.println(hidden);
-                } else {
-                    if (in(wrongKeyword, keyword)) {
-                        continue;
-                    }
-                    wrongKeyword.add(keyword);
-                    HANGMAN.drawHangman(mistakes);
-                    System.out.println(wrongKeyword);
-                    mistakes++;
                 }
+                if (in(usedKeywords, keyword)) {
+                    System.out.println(CORRECT_LETTER_ALREADY_USED_MESSAGE);
+                }
+                usedKeywords.add(keyword);
+                System.out.println(hidden);
             } else {
-                System.out.println(WRONG_KEYWORD_MESSAGE);
+                if (in(wrongKeyword, keyword)) {
+                    continue;
+                }
+
+                if (!isKeyword(keyword)) {
+                    System.out.println(WRONG_KEYWORD_MESSAGE);
+                    continue;
+                }
+                wrongKeyword.add(keyword);
+                HANGMAN.drawHangman(mistakes);
+                System.out.println(wrongKeyword);
+                mistakes++;
             }
 
             if (mistakes == DEAD_STATE) {
@@ -91,8 +93,8 @@ public class Main {
         return words.get(random.nextInt(words.size()));
     }
 
-    public static boolean correctKeyword(String keyword) {
-
+    public static boolean correctKeyword(String keyword, String word) {
+        return isKeyword(keyword) && in(word, keyword);
     }
 
     public static boolean in(String word, String keyword) {
