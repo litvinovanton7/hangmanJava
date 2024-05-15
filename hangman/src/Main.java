@@ -4,11 +4,11 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class Main {
-    private static final String WIN_MESSAGE = "Congratulation! You won this game";
-    private static final String LOSE_MESSAGE = "Sorry but you lost this game";
+    private static final String GAME_WIN_MESSAGE = "Congratulation! You won this game";
+    private static final String GAME_LOST_MESSAGE = "Sorry but you lost this game";
     private static final String WRONG_KEYWORD_MESSAGE = "Please input a correct letter[a..z]";
-    private static final String USED_WRONG_KEYWORD_MESSAGE = "You already used this letter, and it is the wrong letter.";
-    private static final String USED_CORRECT_KEYWORD_MESSAGE = "You already used this letter, and it is the correct letter.";
+    private static final String WRONG_LETTER_ALREADY_USED_MESSAGE = "You already used this letter, and it is the wrong letter.";
+    private static final String CORRECT_LETTER_ALREADY_USED_MESSAGE = "You already used this letter, and it is the correct letter.";
     private static final int DEAD_STATE = 7;
     private static final Hangman HANGMAN = new Hangman();
     private static final String RANDOM_WORD;
@@ -40,7 +40,7 @@ public class Main {
             String keyword = sc.next();
 
             if (in(wrongKeyword, keyword)) {
-                System.out.println(USED_WRONG_KEYWORD_MESSAGE);
+                System.out.println(WRONG_LETTER_ALREADY_USED_MESSAGE);
             }
 
             if (isKeyword(keyword)) {
@@ -51,7 +51,7 @@ public class Main {
                         }
                     }
                     if (in(usedKeywords, keyword)) {
-                        System.out.println(USED_CORRECT_KEYWORD_MESSAGE);
+                        System.out.println(CORRECT_LETTER_ALREADY_USED_MESSAGE);
                     }
                     usedKeywords.add(keyword);
                     System.out.println(hidden);
@@ -69,12 +69,12 @@ public class Main {
             }
 
             if (mistakes == DEAD_STATE) {
-                System.out.println(LOSE_MESSAGE);
+                System.out.println(GAME_LOST_MESSAGE);
                 break;
             }
 
             if (isWin(hidden)) {
-                System.out.println(WIN_MESSAGE);
+                System.out.println(GAME_WIN_MESSAGE);
                 break;
             }
         }
@@ -89,6 +89,10 @@ public class Main {
         }
 
         return words.get(random.nextInt(words.size()));
+    }
+
+    public static boolean correctKeyword(String keyword) {
+
     }
 
     public static boolean in(String word, String keyword) {
