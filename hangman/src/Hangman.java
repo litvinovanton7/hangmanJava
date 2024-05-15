@@ -1,6 +1,6 @@
 public class Hangman {
-    public void drawHangman(int mistakes) {
-        switch (mistakes) {
+    public void drawHangman(int pictureNumber) {
+        switch (pictureNumber) {
             case 0 -> System.out.println("""
                     ___________              \s
                     |   \\    |
@@ -64,6 +64,7 @@ public class Hangman {
                     |
                     ~~~~~~~~~~~
                    \s""");
+            default -> System.out.println("Wrong number");
         }
     }
 }
