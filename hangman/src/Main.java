@@ -32,53 +32,70 @@ public class Main {
         List<String> wrongKeyword = new ArrayList<>();
         List<String> usedKeywords = new ArrayList<>();
         int mistakes = 0;
+        boolean playAgain;
 
         System.out.println(RANDOM_WORD);
 
-        while (true) {
-            System.out.print("Input a keyword: ");
-            String keyword = sc.next();
+        do {
+            while (true) {
+                System.out.print("Input a keyword: ");
+                String keyword = sc.next();
 
-            if (in(wrongKeyword, keyword)) {
-                System.out.println(WRONG_LETTER_ALREADY_USED_MESSAGE);
-            }
-
-
-            if (correctKeyword(keyword, RANDOM_WORD)) {
-                for (int i = 0; i < RANDOM_WORD.length(); i++) {
-                    if (RANDOM_WORD.charAt(i) == keyword.charAt(0)) {
-                        hiddenRandomWord.replace(i, i + 1, keyword);
-                    }
-                }
-                if (in(usedKeywords, keyword)) {
-                    System.out.println(CORRECT_LETTER_ALREADY_USED_MESSAGE);
-                }
-                usedKeywords.add(keyword);
-                System.out.println(hiddenRandomWord);
-            } else {
                 if (in(wrongKeyword, keyword)) {
-                    continue;
+                    System.out.println(WRONG_LETTER_ALREADY_USED_MESSAGE);
                 }
 
-                if (!isKeyword(keyword)) {
-                    System.out.println(WRONG_KEYWORD_MESSAGE);
-                    continue;
+
+                if (correctKeyword(keyword, RANDOM_WORD)) {
+                    changeCorrectLetter(hiddenRandomWord, keyword);
+                    usedKeywords.add(keyword);
+                    System.out.println(hiddenRandomWord);
+                } else {
+                    if (in(wrongKeyword, keyword)) {
+                        continue;
+                    }
+
+                    if (!isKeyword(keyword)) {
+                        System.out.println(WRONG_KEYWORD_MESSAGE);
+                        continue;
+                    }
+
+                    wrongKeyword.add(keyword);
+                    HANGMAN.drawHangman(mistakes);
+                    System.out.println(wrongKeyword);
+                    mistakes++;
                 }
-                wrongKeyword.add(keyword);
-                HANGMAN.drawHangman(mistakes);
-                System.out.println(wrongKeyword);
-                mistakes++;
+
+                if (isWin(hiddenRandomWord)) {
+                    System.out.println(GAME_WIN_MESSAGE);
+                    break;
+                }
+                if (isLose(mistakes)) {
+                    System.out.println(GAME_LOST_MESSAGE);
+                    break;
+                }
+            }
+            System.out.println("Do you want to play again?[yes/no]");
+
+            String userAnswer = sc.next().toLowerCase();
+
+            if (userAnswer.equals("no")) {
+                System.out.println("Thank you for a game. See you soon");
+                break;
             }
 
-            if (isWin(hiddenRandomWord)) {
-                System.out.println(GAME_WIN_MESSAGE);
-                break;
-            }
-            if (isLose(mistakes)){
-                System.out.println(GAME_LOST_MESSAGE);
-                break;
+            playAgain = isPlayAgain(userAnswer);
+        } while (playAgain);
+    }
+
+    public static StringBuilder changeCorrectLetter(StringBuilder hiddenWord, String userKeyword) {
+        for (int i = 0; i < RANDOM_WORD.length(); i++) {
+            if (RANDOM_WORD.charAt(i) == userKeyword.charAt(0)) {
+                hiddenWord.replace(i, i + 1, userKeyword);
             }
         }
+
+        return hiddenWord;
     }
 
     public static String getRandomWord() throws IOException {
@@ -90,6 +107,10 @@ public class Main {
         }
 
         return words.get(random.nextInt(words.size()));
+    }
+
+    public static boolean isPlayAgain(String answer) {
+        return answer.equals("yes");
     }
 
     public static boolean correctKeyword(String keyword, String word) {
