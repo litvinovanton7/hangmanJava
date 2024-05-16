@@ -70,11 +70,13 @@ public class Main {
                 mistakes++;
             }
 
-            if (isWinner(hiddenRandomWord, mistakes)) {
+            if (isWin(hiddenRandomWord)) {
                 System.out.println(GAME_WIN_MESSAGE);
                 break;
-            } else {
+            }
+            if (isLose(mistakes)){
                 System.out.println(GAME_LOST_MESSAGE);
+                break;
             }
         }
     }
@@ -102,16 +104,12 @@ public class Main {
         return list.contains(keyword);
     }
 
-    public static boolean isWin(StringBuilder word) {
-        return word.toString().equals(RANDOM_WORD);
+    public static boolean isWin(StringBuilder guessedWord) {
+        return guessedWord.toString().equals(RANDOM_WORD);
     }
 
-    public static boolean isLose(int mistakes) {
-        return mistakes == DEAD_STATE;
-    }
-
-    public static boolean isWinner(StringBuilder word, int mistakes) {
-        return isWin(word) && !isLose(mistakes);
+    public static boolean isLose(int userFails) {
+        return userFails == DEAD_STATE;
     }
 
     public static boolean isKeyword(String keyword) {
