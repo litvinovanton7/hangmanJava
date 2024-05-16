@@ -11,21 +11,12 @@ public class Main {
     private static final int DEAD_STATE = 7;
     private static final Hangman HANGMAN = new Hangman();
     private static final Scanner sc = new Scanner(System.in);
-    private static final String RANDOM_WORD;
 
-    static {
-        try {
-            RANDOM_WORD = getRandomWord().toLowerCase();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         boolean playAgain;
 
         do {
-            gameLoop(RANDOM_WORD);
+            gameLoop();
 
             System.out.println("Do you want to play again?[yes/no]");
 
@@ -40,7 +31,8 @@ public class Main {
         } while (playAgain);
     }
 
-    public static void gameLoop(String randomWord) {
+    public static void gameLoop() throws IOException {
+        String randomWord = getRandomWord().toLowerCase();
         StringBuilder hiddenRandomWord = new StringBuilder();
         hiddenRandomWord.append("*".repeat(randomWord.length()));
         List<String> wrongKeywords = new ArrayList<>();
@@ -58,7 +50,7 @@ public class Main {
 
 
             if (correctKeyword(keyword, randomWord)) {
-                changeCorrectLetter(hiddenRandomWord, keyword);
+                changeCorrectLetter(hiddenRandomWord, keyword, randomWord);
                 System.out.println(hiddenRandomWord);
             } else {
                 if (in(wrongKeywords, keyword)) {
@@ -76,7 +68,7 @@ public class Main {
                 mistakes++;
             }
 
-            if (isWin(hiddenRandomWord)) {
+            if (isWin(hiddenRandomWord, randomWord)) {
                 System.out.println(GAME_WIN_MESSAGE);
                 break;
             }
@@ -87,9 +79,9 @@ public class Main {
         }
     }
 
-    public static void changeCorrectLetter(StringBuilder hiddenWord, String userKeyword) {
-        for (int i = 0; i < RANDOM_WORD.length(); i++) {
-            if (RANDOM_WORD.charAt(i) == userKeyword.charAt(0)) {
+    public static void changeCorrectLetter(StringBuilder hiddenWord, String userKeyword, String randomWord) {
+        for (int i = 0; i < randomWord.length(); i++) {
+            if (randomWord.charAt(i) == userKeyword.charAt(0)) {
                 hiddenWord.replace(i, i + 1, userKeyword);
             }
         }
@@ -122,8 +114,8 @@ public class Main {
         return list.contains(keyword);
     }
 
-    public static boolean isWin(StringBuilder guessedWord) {
-        return guessedWord.toString().equals(RANDOM_WORD);
+    public static boolean isWin(StringBuilder userKeyword, String wordToCheck) {
+        return userKeyword.toString().equals(wordToCheck);
     }
 
     public static boolean isLose(int userFails) {
