@@ -79,10 +79,10 @@ public class Main {
         }
     }
 
-    public static void changeCorrectLetter(StringBuilder hiddenWord, String userKeyword, String randomWord) {
+    public static void changeCorrectLetter(StringBuilder hiddenWord, String letterToChange, String randomWord) {
         for (int i = 0; i < randomWord.length(); i++) {
-            if (randomWord.charAt(i) == userKeyword.charAt(0)) {
-                hiddenWord.replace(i, i + 1, userKeyword);
+            if (randomWord.charAt(i) == letterToChange.charAt(0)) {
+                hiddenWord.replace(i, i + 1, letterToChange);
             }
         }
     }
