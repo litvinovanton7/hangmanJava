@@ -98,8 +98,8 @@ public class Main {
         return words.get(random.nextInt(words.size()));
     }
 
-    public static boolean isPlayAgain(String answer) {
-        return answer.equals("yes");
+    public static boolean isPlayAgain(String userAnswer) {
+        return userAnswer.equals("yes");
     }
 
     public static boolean correctKeyword(String userKeyword, String wordToCheck) {
