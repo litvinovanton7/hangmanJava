@@ -102,8 +102,8 @@ public class Main {
         return answer.equals("yes");
     }
 
-    public static boolean correctKeyword(String keyword, String word) {
-        return isKeyword(keyword) && in(word, keyword);
+    public static boolean correctKeyword(String userKeyword, String wordToCheck) {
+        return isKeyword(userKeyword) && in(wordToCheck, userKeyword);
     }
 
     public static boolean in(String word, String keyword) {
