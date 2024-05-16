@@ -8,9 +8,9 @@ public class Main {
     private static final String GAME_LOST_MESSAGE = "Sorry but you lost this game";
     private static final String WRONG_KEYWORD_MESSAGE = "Please input a correct letter[a..z]";
     private static final String WRONG_LETTER_ALREADY_USED_MESSAGE = "You already used this letter, and it is the wrong letter.";
-    private static final String CORRECT_LETTER_ALREADY_USED_MESSAGE = "You already used this letter, and it is the correct letter.";
     private static final int DEAD_STATE = 7;
     private static final Hangman HANGMAN = new Hangman();
+    private static final Scanner sc = new Scanner(System.in);
     private static final String RANDOM_WORD;
 
     static {
@@ -22,59 +22,11 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        gameLoop();
-    }
-
-    public static void gameLoop() {
-        StringBuilder hiddenRandomWord = new StringBuilder();
-        Scanner sc = new Scanner(System.in);
-        hiddenRandomWord.append("*".repeat(RANDOM_WORD.length()));
-        List<String> wrongKeyword = new ArrayList<>();
-        List<String> usedKeywords = new ArrayList<>();
-        int mistakes = 0;
         boolean playAgain;
 
-        System.out.println(RANDOM_WORD);
-
         do {
-            while (true) {
-                System.out.print("Input a keyword: ");
-                String keyword = sc.next();
+            gameLoop(RANDOM_WORD);
 
-                if (in(wrongKeyword, keyword)) {
-                    System.out.println(WRONG_LETTER_ALREADY_USED_MESSAGE);
-                }
-
-
-                if (correctKeyword(keyword, RANDOM_WORD)) {
-                    changeCorrectLetter(hiddenRandomWord, keyword);
-                    usedKeywords.add(keyword);
-                    System.out.println(hiddenRandomWord);
-                } else {
-                    if (in(wrongKeyword, keyword)) {
-                        continue;
-                    }
-
-                    if (!isKeyword(keyword)) {
-                        System.out.println(WRONG_KEYWORD_MESSAGE);
-                        continue;
-                    }
-
-                    wrongKeyword.add(keyword);
-                    HANGMAN.drawHangman(mistakes);
-                    System.out.println(wrongKeyword);
-                    mistakes++;
-                }
-
-                if (isWin(hiddenRandomWord)) {
-                    System.out.println(GAME_WIN_MESSAGE);
-                    break;
-                }
-                if (isLose(mistakes)) {
-                    System.out.println(GAME_LOST_MESSAGE);
-                    break;
-                }
-            }
             System.out.println("Do you want to play again?[yes/no]");
 
             String userAnswer = sc.next().toLowerCase();
@@ -88,14 +40,59 @@ public class Main {
         } while (playAgain);
     }
 
-    public static StringBuilder changeCorrectLetter(StringBuilder hiddenWord, String userKeyword) {
+    public static void gameLoop(String randomWord) {
+        StringBuilder hiddenRandomWord = new StringBuilder();
+        hiddenRandomWord.append("*".repeat(randomWord.length()));
+        List<String> wrongKeywords = new ArrayList<>();
+        int mistakes = 0;
+
+        System.out.println(randomWord);
+
+        while (true) {
+            System.out.print("Input a keyword: ");
+            String keyword = sc.next();
+
+            if (in(wrongKeywords, keyword)) {
+                System.out.println(WRONG_LETTER_ALREADY_USED_MESSAGE);
+            }
+
+
+            if (correctKeyword(keyword, randomWord)) {
+                changeCorrectLetter(hiddenRandomWord, keyword);
+                System.out.println(hiddenRandomWord);
+            } else {
+                if (in(wrongKeywords, keyword)) {
+                    continue;
+                }
+
+                if (!isKeyword(keyword)) {
+                    System.out.println(WRONG_KEYWORD_MESSAGE);
+                    continue;
+                }
+
+                wrongKeywords.add(keyword);
+                HANGMAN.drawHangman(mistakes);
+                System.out.println(wrongKeywords);
+                mistakes++;
+            }
+
+            if (isWin(hiddenRandomWord)) {
+                System.out.println(GAME_WIN_MESSAGE);
+                break;
+            }
+            if (isLose(mistakes)) {
+                System.out.println(GAME_LOST_MESSAGE);
+                break;
+            }
+        }
+    }
+
+    public static void changeCorrectLetter(StringBuilder hiddenWord, String userKeyword) {
         for (int i = 0; i < RANDOM_WORD.length(); i++) {
             if (RANDOM_WORD.charAt(i) == userKeyword.charAt(0)) {
                 hiddenWord.replace(i, i + 1, userKeyword);
             }
         }
-
-        return hiddenWord;
     }
 
     public static String getRandomWord() throws IOException {
