@@ -106,12 +106,12 @@ public class Main {
         return isKeyword(userKeyword) && in(wordToCheck, userKeyword);
     }
 
-    public static boolean in(String word, String keyword) {
-        return word.contains(keyword);
+    public static boolean in(String word, String keywordToFindInWord) {
+        return word.contains(keywordToFindInWord);
     }
 
-    public static boolean in(List<String> list, String keyword) {
-        return list.contains(keyword);
+    public static boolean in(List<String> list, String keywordToFindInWord) {
+        return list.contains(keywordToFindInWord);
     }
 
     public static boolean isWin(StringBuilder userKeyword, String wordToCheck) {
